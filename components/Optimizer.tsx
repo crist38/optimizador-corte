@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { Plus, Trash2, Box, RefreshCw, Monitor, Layers, ChevronLeft, ChevronRight, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Item, SheetResult, packMultipleSheets } from "@/lib/packer";
-import { jsPDF } from "jspdf";
+import jsPDF from "jspdf";
 
 // --- Types ---
 type SheetSize = {
