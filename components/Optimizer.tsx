@@ -215,13 +215,7 @@ function Visualizer({ sheetResult }: { sheetResult: SheetResult }) {
 
 export function Optimizer() {
     const [sheetSize, setSheetSize] = useState<SheetSize>({ w: 3600, h: 2500 });
-    const [items, setItems] = useState<Item[]>([
-        { id: '1', w: 1821, h: 366, quantity: 2 },
-        { id: '3', w: 1821, h: 771.6, quantity: 1 },
-        { id: '4', w: 500, h: 500, quantity: 2 },
-        { id: '6', w: 500, h: 503.6, quantity: 1 },
-        { id: '7', w: 102.6, h: 1510, quantity: 1 },
-    ]);
+    const [items, setItems] = useState<Item[]>([]);
 
     const [sheets, setSheets] = useState<SheetResult[]>([]);
     const [currentSheetIndex, setCurrentSheetIndex] = useState(0);
