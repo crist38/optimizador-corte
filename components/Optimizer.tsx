@@ -2,9 +2,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Box, RefreshCw, Monitor, Layers, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, Trash2, Box, RefreshCw, Monitor, Layers, ChevronLeft, ChevronRight, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Item, SheetResult, packMultipleSheets } from "@/lib/packer";
+import { jsPDF } from "jspdf";
 
 // --- Types ---
 type SheetSize = {
@@ -21,6 +22,8 @@ function InputSection({
     onUpdateItem,
     sheetSize,
     setSheetSize,
+    onExportPDF,
+    hasResults
 }: {
     items: Item[];
     onAddItem: () => void;
@@ -28,6 +31,8 @@ function InputSection({
     onUpdateItem: (id: string, field: keyof Item, value: any) => void;
     sheetSize: SheetSize;
     setSheetSize: (s: SheetSize) => void;
+    onExportPDF: () => void;
+    hasResults: boolean;
 }) {
     return (
         <div className="space-y-6 bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
@@ -134,6 +139,15 @@ function InputSection({
                     )}
                 </div>
             </div>
+
+            <button
+                onClick={onExportPDF}
+                disabled={!hasResults}
+                className="w-full py-3 px-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+                <Download className="w-5 h-5" />
+                Exportar Pautas PDF
+            </button>
         </div>
     );
 }
@@ -247,6 +261,72 @@ export function Optimizer() {
         setItems(prev => prev.map(i => i.id === id ? { ...i, [field]: value } : i));
     };
 
+    const generatePDF = () => {
+        const doc = new jsPDF({
+            orientation: 'landscape',
+            unit: 'mm',
+            format: 'a4'
+        });
+
+        // A4 Landscape: 297 x 210 mm
+        const pageWidth = 297;
+        const pageHeight = 210;
+        const margin = 10;
+        const maxDrawWidth = pageWidth - (margin * 2);
+        const maxDrawHeight = pageHeight - (margin * 3); // Leave header space
+
+        sheets.forEach((sheet, index) => {
+            if (index > 0) doc.addPage();
+
+            // Header
+            doc.setFontSize(16);
+            doc.text(`GlassOpt - Pauta de Corte ${index + 1}/${sheets.length}`, margin, 15);
+
+            doc.setFontSize(10);
+            doc.text(`Plancha: ${sheet.width}x${sheet.height}mm | Aprovechamiento: ${(sheet.stats.usage * 100).toFixed(1)}% | Piezas: ${sheet.stats.placedCount}`, margin, 22);
+
+            // Scale calculation
+            // Try to fit width
+            let scale = maxDrawWidth / sheet.width;
+            if (sheet.height * scale > maxDrawHeight) {
+                scale = maxDrawHeight / sheet.height;
+            }
+
+            const startX = (pageWidth - (sheet.width * scale)) / 2;
+            const startY = 30;
+
+            // Draw Sheet Outline
+            doc.setDrawColor(0);
+            doc.setLineWidth(0.5);
+            doc.rect(startX, startY, sheet.width * scale, sheet.height * scale);
+
+            // Draw Items
+            doc.setLineWidth(0.2);
+            sheet.placedItems.forEach(item => {
+                const x = startX + (item.x * scale);
+                const y = startY + (item.y * scale);
+                const w = item.w * scale;
+                const h = item.h * scale;
+
+                // Fill logic? Maybe just rect
+                doc.rect(x, y, w, h);
+
+                // Text centered
+                if (w > 10 && h > 5) {
+                    doc.setFontSize(8);
+                    const label = `${Math.round(item.w)}x${Math.round(item.h)}`;
+                    const textWidth = doc.getTextWidth(label);
+                    // Check if fit
+                    if (textWidth < w) {
+                        doc.text(label, x + (w / 2) - (textWidth / 2), y + (h / 2) + 1);
+                    }
+                }
+            });
+        });
+
+        doc.save("pautas_vidrio_optimizadas.pdf");
+    };
+
     const currentSheet = sheets[currentSheetIndex];
 
     return (
@@ -260,6 +340,8 @@ export function Optimizer() {
                     onUpdateItem={updateItem}
                     sheetSize={sheetSize}
                     setSheetSize={setSheetSize}
+                    onExportPDF={generatePDF}
+                    hasResults={sheets.length > 0}
                 />
 
                 <div className="bg-gradient-to-br from-cyan-600 to-blue-700 rounded-2xl p-6 text-white shadow-lg">
