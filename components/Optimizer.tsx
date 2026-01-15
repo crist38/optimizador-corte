@@ -184,7 +184,7 @@ function Visualizer({ sheetResult }: { sheetResult: SheetResult }) {
                     }}
                 >
                     {/* Grid lines or texture for glass effect? */}
-                    <rect x="0" y="0" width={width} height={height} fill="none" strokeWidth="2" className="stroke-slate-200 dark:stroke-slate-800" />
+                    <rect x="0" y="0" width={width} height={height} fill="none" strokeWidth="4" className="stroke-slate-900 dark:stroke-slate-100" />
 
                     {placedItems.map((item, idx) => (
                         <g key={item.id + idx} className="group cursor-pointer hover:opacity-90 transition-opacity">
@@ -303,7 +303,7 @@ export function Optimizer() {
 
             // Draw Sheet Outline
             doc.setDrawColor(0);
-            doc.setLineWidth(0.5);
+            doc.setLineWidth(1); // Thicker border
             doc.rect(startX, startY, sheet.width * scale, sheet.height * scale);
 
             // Draw Items
