@@ -258,7 +258,13 @@ export function Optimizer() {
     };
 
     const updateItem = (id: string, field: keyof Item, value: any) => {
-        setItems(prev => prev.map(i => i.id === id ? { ...i, [field]: value } : i));
+        let newValue = value;
+        if (typeof newValue === "number" && (field === "w" || field === "h")) {
+            // Apply limits based on sheet size
+            if (field === "w" && newValue > sheetSize.w) newValue = sheetSize.w;
+            if (field === "h" && newValue > sheetSize.h) newValue = sheetSize.h;
+        }
+        setItems(prev => prev.map(i => i.id === id ? { ...i, [field]: newValue } : i));
     };
 
     const generatePDF = () => {
