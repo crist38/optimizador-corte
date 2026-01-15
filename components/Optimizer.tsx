@@ -39,7 +39,7 @@ function InputSection({
             <div>
                 <h2 className="text-lg font-semibold flex items-center gap-2 mb-4">
                     <Monitor className="w-5 h-5 text-cyan-500" />
-                    Dimensión de Plancha
+                    Dimensión de la Plancha
                 </h2>
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1">
@@ -146,7 +146,7 @@ function InputSection({
                 className="w-full py-3 px-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 <Download className="w-5 h-5" />
-                Exportar Pautas PDF
+                Exportar a PDF
             </button>
         </div>
     );
@@ -352,7 +352,7 @@ export function Optimizer() {
                     </h3>
                     <p className="text-cyan-100 text-sm opacity-90">
                         La distribución se actualiza automáticamente.
-                        Algoritmo de guillotina optimizado para cortes de bordes completos.
+                        Algoritmo optimizado para cortes de bordes completos.
                     </p>
                 </div>
             </div>

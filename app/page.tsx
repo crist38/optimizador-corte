@@ -10,7 +10,7 @@ export default function Home() {
               GlassOpt
             </h1>
             <p className="text-slate-500 dark:text-slate-400 mt-1">
-              Optimizador de Corte Avanzado para Vidrio Plano
+              Optimizador de Corte Avanzado para Planchas de Vidrio
             </p>
           </div>
           <div className="flex items-center gap-3">
