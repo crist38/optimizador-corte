@@ -20,6 +20,21 @@ export default function Home() {
 
         <Optimizer />
       </div>
+      <footer className="bg-slate-900 text-white py-8 mt-12 border-t border-cyan-900/50">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8">
+          <div className="flex flex-col gap-4">
+            <h3 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent w-fit">
+              Contacto
+            </h3>
+            <div className="flex items-center gap-2 text-slate-300">
+              <span className="font-semibold text-white">Email:</span>
+              <a href="mailto:cripter.programas@gmail.com" className="hover:text-cyan-400 transition-colors">
+                cripter.programas@gmail.com
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }
