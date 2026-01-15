@@ -278,8 +278,9 @@ export function Optimizer() {
         const pageWidth = 297;
         const pageHeight = 210;
         const margin = 10;
+        const startY = 30;
         const maxDrawWidth = pageWidth - (margin * 2);
-        const maxDrawHeight = pageHeight - (margin * 3); // Leave header space
+        const maxDrawHeight = pageHeight - startY - margin;
 
         sheets.forEach((sheet, index) => {
             if (index > 0) doc.addPage();
@@ -298,19 +299,19 @@ export function Optimizer() {
                 scale = maxDrawHeight / sheet.height;
             }
 
-            const startX = (pageWidth - (sheet.width * scale)) / 2;
-            const startY = 30;
+            const drawX = (pageWidth - (sheet.width * scale)) / 2;
+            const drawY = startY;
 
             // Draw Sheet Outline
             doc.setDrawColor(0);
             doc.setLineWidth(1); // Thicker border
-            doc.rect(startX, startY, sheet.width * scale, sheet.height * scale);
+            doc.rect(drawX, drawY, sheet.width * scale, sheet.height * scale);
 
             // Draw Items
             doc.setLineWidth(0.2);
             sheet.placedItems.forEach(item => {
-                const x = startX + (item.x * scale);
-                const y = startY + (item.y * scale);
+                const x = drawX + (item.x * scale);
+                const y = drawY + (item.y * scale);
                 const w = item.w * scale;
                 const h = item.h * scale;
 
